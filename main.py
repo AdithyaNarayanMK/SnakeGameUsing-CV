@@ -2,6 +2,7 @@ import cvzone
 import cv2 as cv
 import numpy as np
 from cvzone.HandTrackingModule import HandDetector
+import math
 
 # Making a camera object
 
@@ -11,6 +12,32 @@ cap.set(4, 720)
 
 detector = HandDetector(detectionCon = .8, maxHands = 1)
 
+class SnakeGameClass:
+    def __init__(self) -> None:
+        self.points = [] # All points in the snake
+        self.lengths = [] # The length of all points in the snake
+        self.currentLength = 0 # Total length of the snake
+        self.allowedLength = 150
+        self.previousHead = 0, 0
+    
+    def update(self, imgMain, currentHead) -> None:
+        px, py = self.previousHead
+        cx, cy = currentHead
+        self.points.append([cx, cy])
+        distance = math.hypot(cx - px, cy - py)
+        self.lengths.append(distance)
+        self.currentLength += distance
+        self.previousHead = currentHead
+
+        # Drawing Snake
+
+        for i, point in enumerate(self.points):
+            if i != 0:
+                cv.line(imgMain, self.points[i - 1], self.points[i], (0, 0, 255), 20)
+        cv.circle(imgMain, self.points[-1], 20, (200, 0, 200), cv.FILLED)
+        return imgMain        
+
+game = SnakeGameClass()
 
 while True:
     ret, img = cap.read()
@@ -19,8 +46,7 @@ while True:
     if hands:
         lmList = hands[0]["lmList"]  # lmlist -> landmarkList
         pointIndex = lmList[8][: 2]
-        cv.circle(img, pointIndex, 20, (200, 0, 200), cv.FILLED)
-
+        img = game.update(img, pointIndex)
 
     cv.imshow("Game",img)
     if cv.waitKey(10) == ord("e") or cv.waitKey(10) == ord("E"):
