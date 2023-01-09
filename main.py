@@ -20,7 +20,7 @@ class SnakeGameClass:
         self.currentLength = 0 # Total length of the snake
         self.allowedLength = 130
         self.previousHead = 0, 0
-
+        self.score = 0
         self.imgFood = cv.imread(path, cv.IMREAD_UNCHANGED)
         self.hFood, self.wFood, _ = self.imgFood.shape
         self.foodPoint = 0, 0
@@ -47,7 +47,13 @@ class SnakeGameClass:
                 if self.currentLength < self.allowedLength:
                     break
             
-
+        rx, ry = self.foodPoint
+        if rx - self.wFood // 2 < cx <rx + self.wFood and \
+            ry - self.hFood // 2 < cy < ry + self.hFood:
+            
+            self.randomFoodLocation()
+            self.allowedLength += 40
+            self.score += 1
 
         # Drawing Snake
         if self.points:
@@ -58,7 +64,6 @@ class SnakeGameClass:
 
 
         # Draw the food
-        rx, ry = self.foodPoint
         imgMain = cvzone.overlayPNG(imgMain, self.imgFood, (rx - (self.wFood // 2), ry - (self.hFood // 2)))
         return imgMain        
 
