@@ -94,9 +94,9 @@ while True:
     hands, img = detector.findHands(img, flipType = False)
     if game.GameOver:
         game.gameOver()
-        cvzone.putTextRect(img, "Game Over", [300, 400],
+        cvzone.putTextRect(img, "Game Over!!!", [300, 400],
                             scale= 7, thickness= 5, offset= 20)
-        cvzone.putTextRect(img, F"Your Scorre {game.score}", [300, 400],
+        cvzone.putTextRect(img, F"Your Score {game.score}", [300, 400],
                             scale= 7, thickness= 5, offset= 20)
     else:
         if hands:
