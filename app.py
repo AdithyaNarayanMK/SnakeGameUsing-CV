@@ -21,7 +21,7 @@ if st.button("Play Game",type="primary"):
     cap.set(4, 720)
 
     detector = HandDetector(detectionCon = .8, maxHands = 1)
-    @st.cache
+    @st.cache_resource
     class SnakeGameClass:
         def __init__(self, path : str) -> None:
             self.points = [] # All points in the snake
